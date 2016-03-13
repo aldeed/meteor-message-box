@@ -7,7 +7,11 @@ MessageBox = class {
     messages,
   }) {
     this._language = new ReactiveVar(initialLanguage || MessageBox._language || 'en');
-    this._messages = messages;
+    this._messages = messages || {};
+  }
+
+  messages(messages) {
+    deepExtend(this._messages, messages);
   }
 
   _getMessages({
@@ -16,7 +20,15 @@ MessageBox = class {
   }) {
     language = language || this._language.get();
 
-    const messages = this._messages[language] || MessageBox._messages[language];
+    const globalMessages = MessageBox._messages[language];
+
+    const messages = this._messages[language];
+    if (messages) {
+      if (globalMessages) messages = deepExtend({}, globalMessages, messages);
+    } else {
+      messages = globalMessages;
+    }
+
     if (!messages) throw new Error(`No messages found for language "${language}"`);
 
     return {
