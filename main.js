@@ -1,11 +1,11 @@
-const Handlebars = Npm.require('handlebars');
-const deepExtend = Npm.require('deep-extend');
+import Handlebars from 'handlebars';
+import deepExtend from 'deep-extend';
 
 MessageBox = class {
   constructor({
     initialLanguage,
     messages,
-  }) {
+  } = {}) {
     this._language = new ReactiveVar(initialLanguage || MessageBox._language || 'en');
     this._messages = messages || {};
   }
@@ -22,7 +22,7 @@ MessageBox = class {
 
     const globalMessages = MessageBox._messages[language];
 
-    const messages = this._messages[language];
+    let messages = this._messages[language];
     if (messages) {
       if (globalMessages) messages = deepExtend({}, globalMessages, messages);
     } else {
@@ -40,7 +40,7 @@ MessageBox = class {
   message(errorInfo, {
     language,
     context,
-  }) {
+  } = {}) {
     // Error objects can optionally include a preformatted message,
     // in which case we use that.
     if (errorInfo.message) return errorInfo.message;
@@ -56,14 +56,13 @@ MessageBox = class {
 
     const fullContext = _.extend({
       genericName,
-      label,
     }, context, errorInfo);
 
-    if (_.isObject(message)) message = message[genericName] || message._default;
+    if (_.isObject(message) && typeof message !== 'function') message = message[genericName] || message._default;
 
-    if (typeof message === 'string') message = Handlebars.compile(message)(fullContext);
+    if (typeof message === 'string') message = Handlebars.compile(message);
 
-    if (typeof message !== 'function') return `${name} is invalid`;
+    if (typeof message !== 'function') return `${fieldName} is invalid`;
 
     return message(fullContext);
   }
@@ -80,7 +79,7 @@ MessageBox = class {
   static defaults({
     initialLanguage,
     messages,
-  }) {
+  } = {}) {
     if (typeof initialLanguage === 'string') MessageBox._language = initialLanguage;
 
     if (messages) {

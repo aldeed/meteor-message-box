@@ -13,8 +13,8 @@ Npm.depends({
 Package.onUse(function(api) {
   api.use([
     'reactive-var@1.0.0',
-    'ecmascript',
-    'underscore',
+    'ecmascript@0.0.1',
+    'underscore@1.0.0',
   ]);
 
   api.addFiles([

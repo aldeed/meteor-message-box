@@ -1,6 +1,6 @@
 # MessageBox
 
-WORK IN PROGRESS - NOT YET PUBLISHED
+WORK IN PROGRESS
 
 A Meteor package for defining and getting validation error messages with reactive language selection.
 
