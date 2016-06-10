@@ -63,7 +63,7 @@ For any of the ways you can set messages, the message can be either a string or 
 #### Example
 
 ```js
-ForceField.defaults({
+MessageBox.defaults({
   initialLanguage: 'en',
   messages: {
     en: {
